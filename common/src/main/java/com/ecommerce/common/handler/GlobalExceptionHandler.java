@@ -1,6 +1,8 @@
-package com.ecommerce.common.exception;
+package com.ecommerce.common.handler;
 
 import com.ecommerce.common.dto.ApiResponse;
+import com.ecommerce.common.exception.BadRequestException;
+import com.ecommerce.common.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
