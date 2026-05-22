@@ -53,8 +53,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public UserResponse getUserById(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+        User user = findOrThrow(id);
         return UserResponse.fromEntity(user);
     }
 
@@ -78,8 +77,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserResponse updateUser(Long id, UserRequest request) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+        User user = findOrThrow(id);
 
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
@@ -97,5 +95,10 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.deleteById(id);
         log.info("Deleted user with id: {}", id);
+    }
+
+    private User findOrThrow(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
     }
 }
