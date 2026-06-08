@@ -25,7 +25,10 @@ public class Order {
     private Long id;
 
     @Column(nullable = false)
-    private Long orderId;
+    private Long userId;
+
+    @Column(unique = true, nullable = false)
+    private String orderNumber;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
