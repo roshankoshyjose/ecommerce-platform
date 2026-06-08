@@ -1,6 +1,7 @@
 package com.ecommerce.order.client;
 
 import com.ecommerce.common.dto.ApiResponse;
+import com.ecommerce.order.dto.ProductClientResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -14,8 +15,8 @@ import java.util.Map;
 public interface ProductClient {
 
     @GetMapping("/api/products/{id}")
-    ApiResponse<Map<String, Object>> getProductById(@PathVariable Long id);
+    ApiResponse<ProductClientResponse> getProductById(@PathVariable Long id);
 
-    @PatchMapping("api/products/{id}/stock")
+    @PatchMapping("/api/products/{id}/stock")
     void updateStock(@PathVariable Long id, @RequestParam int quantity);
 }

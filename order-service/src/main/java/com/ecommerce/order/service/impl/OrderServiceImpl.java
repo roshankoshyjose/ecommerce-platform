@@ -1,13 +1,11 @@
 package com.ecommerce.order.service.impl;
 
+import com.ecommerce.common.dto.ApiResponse;
 import com.ecommerce.common.exception.BadRequestException;
 import com.ecommerce.common.exception.ResourceNotFoundException;
 import com.ecommerce.order.client.ProductClient;
 import com.ecommerce.order.client.UserClient;
-import com.ecommerce.order.dto.OrderItemRequest;
-import com.ecommerce.order.dto.OrderItemResponse;
-import com.ecommerce.order.dto.OrderRequest;
-import com.ecommerce.order.dto.OrderResponse;
+import com.ecommerce.order.dto.*;
 import com.ecommerce.order.enums.OrderStatus;
 import com.ecommerce.order.model.Order;
 import com.ecommerce.order.model.OrderItem;
@@ -45,15 +43,14 @@ public class OrderServiceImpl implements OrderService {
         BigDecimal total = BigDecimal.ZERO;
 
         for (OrderItemRequest itemRequest : request.getItems()) {
-            Map<String, Object> productData = fetchProduct(itemRequest.getProductId());
+            ProductClientResponse product = fetchProduct(itemRequest.getProductId());
 
-            String productName = (String) productData.get("productName");
-            BigDecimal unitPrice = new BigDecimal(productData.get("price").toString());
+            BigDecimal unitPrice = product.getPrice();
             BigDecimal subtotal = unitPrice.multiply(BigDecimal.valueOf(itemRequest.getQuantity()));
 
             items.add(OrderItem.builder()
                     .productId(itemRequest.getProductId())
-                    .productName(productName)
+                    .productName(product.getName())
                     .quantity(itemRequest.getQuantity())
                     .unitPrice(unitPrice)
                     .subtotal(subtotal)
@@ -157,13 +154,13 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new ResourceNotFoundException("Order", "id", id));
     }
 
-    private Map<String, Object> fetchProduct(Long productId) {
+    private ProductClientResponse fetchProduct(Long productId) {
         try {
-            var response = productClient.getProductById(productId);
+            com.ecommerce.common.dto.ApiResponse<ProductClientResponse> response = productClient.getProductById(productId);
             if (response == null || response.getData() == null) {
                 throw new ResourceNotFoundException("Product", "id", productId);
             }
-            return (Map<String, Object>) response.getData();
+            return response.getData();
         } catch (ResourceNotFoundException ex) {
             throw ex;
         } catch (Exception ex) {
