@@ -22,111 +22,56 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<ProductResponse>> createProduct(
-            @Valid @RequestBody ProductRequest request
-    ) {
-
+    public ResponseEntity<ApiResponse<ProductResponse>> createProduct(@Valid @RequestBody ProductRequest request) {
         ProductResponse response = productService.createProduct(request);
-
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(ApiResponse.ok("Product Created Successfully", response));
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.ok("Product Created Successfully", response));
     }
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<ProductResponse>>> getAllProducts() {
-
         List<ProductResponse> responses = productService.getAllProducts();
-
-        return ResponseEntity.ok(
-                ApiResponse.ok("Products Fetched Successfully", responses)
-        );
+        return ResponseEntity.ok(ApiResponse.ok("Products Fetched Successfully", responses));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<ProductResponse>> getProductById(
-            @PathVariable Long id
-    ) {
-
+    public ResponseEntity<ApiResponse<ProductResponse>> getProductById(@PathVariable Long id) {
         ProductResponse response = productService.getProductById(id);
-
-        return ResponseEntity.ok(
-                ApiResponse.ok("Product Fetched Successfully", response)
-        );
+        return ResponseEntity.ok(ApiResponse.ok("Product Fetched Successfully", response));
     }
 
     @GetMapping("/sku/{sku}")
-    public ResponseEntity<ApiResponse<ProductResponse>> getProductBySku(
-            @PathVariable String sku
-    ) {
-
+    public ResponseEntity<ApiResponse<ProductResponse>> getProductBySku(@PathVariable String sku) {
         ProductResponse response = productService.getProductBySku(sku);
-
-        return ResponseEntity.ok(
-                ApiResponse.ok("Product Fetched Successfully", response)
-        );
+        return ResponseEntity.ok(ApiResponse.ok("Product Fetched Successfully", response));
     }
 
     @GetMapping("/category/{category}")
-    public ResponseEntity<ApiResponse<List<ProductResponse>>> getProductsByCategory(
-            @PathVariable Category category
-    ) {
-
-        List<ProductResponse> responses =
-                productService.getProductsByCategory(category);
-
-        return ResponseEntity.ok(
-                ApiResponse.ok("Products Fetched Successfully", responses)
-        );
+    public ResponseEntity<ApiResponse<List<ProductResponse>>> getProductsByCategory(@PathVariable Category category) {
+        List<ProductResponse> responses = productService.getProductsByCategory(category);
+        return ResponseEntity.ok(ApiResponse.ok("Products Fetched Successfully", responses));
     }
 
     @GetMapping("/status/{status}")
-    public ResponseEntity<ApiResponse<List<ProductResponse>>> getProductsByStatus(
-            @PathVariable ProductStatus status
-    ) {
-
-        List<ProductResponse> responses =
-                productService.getProductsByStatus(status);
-
-        return ResponseEntity.ok(
-                ApiResponse.ok("Products Fetched Successfully", responses)
-        );
+    public ResponseEntity<ApiResponse<List<ProductResponse>>> getProductsByStatus(@PathVariable ProductStatus status) {
+        List<ProductResponse> responses = productService.getProductsByStatus(status);
+        return ResponseEntity.ok(ApiResponse.ok("Products Fetched Successfully", responses));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<ProductResponse>> updateProduct(
-            @PathVariable Long id,
-            @Valid @RequestBody ProductRequest request
-    ) {
-
-        ProductResponse response =
-                productService.updateProduct(id, request);
-
-        return ResponseEntity.ok(
-                ApiResponse.ok("Product Updated Successfully", response)
-        );
+    public ResponseEntity<ApiResponse<ProductResponse>> updateProduct(@PathVariable Long id, @Valid @RequestBody ProductRequest request) {
+        ProductResponse response = productService.updateProduct(id, request);
+        return ResponseEntity.ok(ApiResponse.ok("Product Updated Successfully", response));
     }
 
     @PatchMapping("/{id}/stock")
-    public ResponseEntity<ApiResponse<Void>> updateStock(
-            @PathVariable Long id,
-            @RequestParam int quantity
-    ) {
-
+    public ResponseEntity<ApiResponse<Void>> updateStock(@PathVariable Long id, @RequestParam int quantity) {
         productService.updateStock(id, quantity);
-
-        return ResponseEntity.ok(
-                ApiResponse.ok("Product Stock Updated Successfully", null)
-        );
+        return ResponseEntity.ok(ApiResponse.ok("Product stock updated successfully"));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(
-            @PathVariable Long id
-    ) {
-
+    public ResponseEntity<ApiResponse<Void>> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
-
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(ApiResponse.ok("Product deleted successfully"));
     }
 }
